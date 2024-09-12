@@ -1,16 +1,3 @@
-# pks_1
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# ПКС Практическая работа номер 2
+## Скриншот формы регистрации 
+![alt bebesbaba](https://github.com/Zakharov-Ilya-Proger/PKS1/blob/pks2/2024-09-12_20-04-11.png)
