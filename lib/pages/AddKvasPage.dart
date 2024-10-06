@@ -60,7 +60,7 @@ class _AddKvasPageState extends State<AddKvasPage> {
                 if (title.isNotEmpty &&
                     text.isNotEmpty &&
                     imageUrl.isNotEmpty) {
-                  final KvasItem newNote = KvasItem(title, text, imageUrl);
+                  final KvasItem newNote = KvasItem(title, text, imageUrl, false);
                   widget.onNoteAdded(newNote);
                 }
               },

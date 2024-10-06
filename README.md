@@ -1,17 +1,17 @@
-# ПКС ПРАКТИКА 4
+# ПКС ПРАКТИКА 5
 
 # Захаров Илья Кириллович
 
 ## ЭФБО-03-22
 
-### Изначальная страница приложения
-![alt didi](homePage.png)
+### Измененная страница всех квасов
 
-### Удаление кваса
-![alt didi](deliteAction.png)
+![abiba](mainPage.png)
 
-### Страница добавления кваса
-![alt didi](addKvasPage.png)
+### Страница избранных квасов
 
-### Квас добавлен
-![alt didi](newKvasAdded.png)
+![adida](favoritePage.png)
+
+### Страница профиля
+
+![abba](profilePage.png)

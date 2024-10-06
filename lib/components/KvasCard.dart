@@ -14,7 +14,7 @@ class KvasCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.50,
-      height: MediaQuery.of(context).size.height * 0.38,
+      height: MediaQuery.of(context).size.height * 0.45,
       decoration: BoxDecoration(
         border: Border.all(
           color: Colors.black26,
@@ -38,7 +38,7 @@ class KvasCard extends StatelessWidget {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.19,
                 child: Image.network(item.imageUrl
                 ),
               )
