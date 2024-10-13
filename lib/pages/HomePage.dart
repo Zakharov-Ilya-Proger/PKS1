@@ -3,6 +3,7 @@ import 'package:pks3/models/KvasItem.dart';
 import 'package:pks3/pages/KvasPage.dart';
 import '../components/KvasCard.dart';
 import '../main.dart';
+import '../models/BasketItem.dart';
 import 'AddKvasPage.dart';
 
 
@@ -112,6 +113,21 @@ class _HomepageState extends State<Homepage> {
                     KvasCard(item: dada[index]),
                     Positioned(
                       bottom: 8,
+                        left: 8,
+                      child: basket.any((basketItem) => basketItem.kvas.name == dada[index].name)
+                          ? Icon(Icons.check)
+                          : IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          // Добавление элемента в корзину
+                          setState(() {
+                            basket.add(BasketItem(dada[index], 1));
+                          });
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 8,
                       right: 8,
                       child: IconButton(
                         icon: Icon(
@@ -119,10 +135,7 @@ class _HomepageState extends State<Homepage> {
                           color: dada[index].lovely ? Colors.red : Colors.black,
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => kvasPage(item: dada[index])),
-                          );
+                          _deleteNoteConfirmation(context, index);
                         },
                       ),
                     ),

@@ -1,47 +1,73 @@
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
 
-  final String name = 'Захаров И.К.';
-  final String group = 'ЭФБО-03-22';
-  final String phoneNumber = '+7 (967) 214-63-76';
-  final String email = 'zakharov.i.k@edu.mirea.ru';
+class _ProfilePageState extends State<ProfilePage> {
+  bool isEditing = false;
+
+  final TextEditingController fullNameController = TextEditingController(text: 'Захаров Илья Кириллович');
+  final TextEditingController groupController = TextEditingController(text: 'ЭФБО-03-22');
+  final TextEditingController phoneNumberController = TextEditingController(text: '+7 967 214 63 76');
+  final TextEditingController emailController = TextEditingController(text: 'Aboba228@mail.ru');
+
+  void toggleEdit() {
+    setState(() {
+      isEditing = !isEditing;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Профиль'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(isEditing ? Icons.save : Icons.edit),
+            onPressed: toggleEdit,
+          )
+        ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Text(
-                name,
-                style: const TextStyle(fontSize: 24),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                group,
-                style: const TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Телефон: $phoneNumber',
-                style: const TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Email: $email',
-                style: const TextStyle(fontSize: 18),
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildProfileField('ФИО', fullNameController, isEditing),
+            const SizedBox(height: 20),
+            buildProfileField('Группа', groupController, isEditing),
+            const SizedBox(height: 20),
+            buildProfileField('Номер телефона', phoneNumberController, isEditing),
+            const SizedBox(height: 20),
+            buildProfileField('Почта', emailController, isEditing),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget buildProfileField(String label, TextEditingController controller, bool isEditing) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$label:',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 5),
+        isEditing
+            ? TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+          ),
+        )
+            : Text(controller.text, style: const TextStyle(fontSize: 18)),
+      ],
     );
   }
 }

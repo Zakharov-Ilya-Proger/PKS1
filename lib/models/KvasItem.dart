@@ -2,8 +2,9 @@ class KvasItem{
   final String name;
   final String description;
   final String imageUrl;
-  bool lovely;
+  bool lovely = false;
+  bool inBasket = false;
 
-  KvasItem(this.name, this.description, this.imageUrl, this.lovely);
+  KvasItem(this.name, this.description, this.imageUrl);
 
 }
