@@ -1,21 +1,17 @@
-# ПКС ПРАКТИКА 6
+# ПКС ПРАКТИКА 7
 
 # Захаров Илья Кириллович
 
 ## ЭФБО-03-22
 
-### Карточек всех квасов
+## Страница главная
 
-![abiba](mainPage.png)
+![alt biba](ManePage.png)
 
-### Страница корзины квасов
+## Страница корзины
 
-![adida](basketPage.png)
+![alt bibop](CartPage.png)
 
-### Удалене из корзины
+## Страниуа пользователя
 
-![abba](deliteFromBasket.png)
-
-### Страница профиля
-
-![abba](userPage.png)
+![alt bilibiba](GoidaPage.png)

@@ -1,9 +1,7 @@
-import 'KvasItem.dart';
+import 'package:pks3/models/AnalysisItem.dart';
 
-class BasketItem{
-  final KvasItem kvas;
-  int count;
-
-  BasketItem(this.kvas, this.count);
-
+class CartItem{
+  final AnalysisItem item;
+  int count = 1;
+  CartItem(this.item);
 }
