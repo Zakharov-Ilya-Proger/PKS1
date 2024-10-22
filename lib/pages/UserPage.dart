@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -16,18 +15,18 @@ class _UserPageState extends State<UserPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-              padding: EdgeInsets.only(top: 92),
+              padding: const EdgeInsets.only(top: 92),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Гойда",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Padding(
+                const Padding(
                     padding: EdgeInsets.only(top:22),
                   child: Text(
                     "+7-905-134-72-80",
@@ -38,10 +37,10 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(top:16),
                   child: Text(
-                    "GOYDA@svo.ru",
+                    "GOYDA@svo.zov",
                     style: TextStyle(
                       color: Color(0xFF898A8D),
                       fontSize: 15,
@@ -65,9 +64,9 @@ class _UserPageState extends State<UserPage> {
                               width: 32,
                               height: 32,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: const Text(
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
                                 "Мои Гойды",
                                 style: TextStyle(
                                   fontSize: 17,
@@ -78,7 +77,7 @@ class _UserPageState extends State<UserPage> {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 335,
                         height: 64,
                         child: Row(
@@ -89,9 +88,9 @@ class _UserPageState extends State<UserPage> {
                               width: 32,
                               height: 32,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: const Text(
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
                                 "Медицинская гойда",
                                 style: TextStyle(
                                   fontSize: 17,
@@ -102,7 +101,7 @@ class _UserPageState extends State<UserPage> {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 335,
                         height: 64,
                         child: Row(
@@ -113,9 +112,9 @@ class _UserPageState extends State<UserPage> {
                               width: 32,
                               height: 32,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: const Text(
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
                                 "Мои адреса",
                                 style: TextStyle(
                                   fontSize: 17,
@@ -126,7 +125,7 @@ class _UserPageState extends State<UserPage> {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 335,
                         height: 64,
                         child: Row(
@@ -137,9 +136,9 @@ class _UserPageState extends State<UserPage> {
                               width: 32,
                               height: 32,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: const Text(
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
                                 "Настройки",
                                 style: TextStyle(
                                   fontSize: 17,
@@ -156,7 +155,7 @@ class _UserPageState extends State<UserPage> {
               ],
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(top: 48),
             child: Center(
               child: Column(
@@ -170,7 +169,7 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 24),
+                    padding: EdgeInsets.only(top: 24),
                     child: Text(
                       "Политика конфиденциальности",
                       style: TextStyle(
@@ -180,7 +179,7 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 24),
+                    padding: EdgeInsets.only(top: 24),
                     child: Text(
                       "Пользовательское соглашение",
                       style: TextStyle(
@@ -190,7 +189,7 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 24),
+                    padding: EdgeInsets.only(top: 24),
                     child: Text(
                       "Выход",
                       style: TextStyle(
