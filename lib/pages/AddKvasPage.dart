@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pks3/models/KvasItem.dart';
+import '../api_service.dart'; // Импортируйте ваш ApiService
 
 class AddKvasPage extends StatefulWidget {
   final Function(KvasItem) onNoteAdded;
-  const AddKvasPage({super.key, required this.onNoteAdded});
+  final List<KvasItem> kvases;
+  const AddKvasPage({
+    super.key,
+    required this.onNoteAdded,
+    required this.kvases
+  });
 
   @override
   State<AddKvasPage> createState() => _AddKvasPageState();
@@ -13,6 +19,7 @@ class _AddKvasPageState extends State<AddKvasPage> {
   final TextEditingController Kvas_Controller_name = TextEditingController();
   final TextEditingController Kvas_Controller_describe = TextEditingController();
   final TextEditingController Kvas_Controller_image = TextEditingController();
+  final ApiService _apiService = ApiService(); // Создайте экземпляр ApiService
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +59,7 @@ class _AddKvasPageState extends State<AddKvasPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final String title = Kvas_Controller_name.text;
                 final String text = Kvas_Controller_describe.text;
                 final String imageUrl = Kvas_Controller_image.text;
@@ -60,8 +67,14 @@ class _AddKvasPageState extends State<AddKvasPage> {
                 if (title.isNotEmpty &&
                     text.isNotEmpty &&
                     imageUrl.isNotEmpty) {
-                  final KvasItem newNote = KvasItem(title, text, imageUrl);
-                  widget.onNoteAdded(newNote);
+                  final KvasItem newProduct = KvasItem(
+                    ID: widget.kvases.isEmpty ? 1 : widget.kvases.last.ID + 1,
+                    name: title,
+                    description: text,
+                    imageUrl: imageUrl,
+                  );
+                  await _apiService.addProductToServer(newProduct);
+                  widget.onNoteAdded(newProduct);
                 }
               },
               child: const Text('Добавить товар'),

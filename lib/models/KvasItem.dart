@@ -1,10 +1,23 @@
-class KvasItem{
+class KvasItem {
+  final int ID;
   final String name;
   final String description;
   final String imageUrl;
   bool lovely = false;
-  bool inBasket = false;
 
-  KvasItem(this.name, this.description, this.imageUrl);
+  KvasItem({
+    required this.ID,
+    required this.name,
+    required this.description,
+    required this.imageUrl
+  });
 
+  factory KvasItem.fromJson(Map<String, dynamic> json) {
+    return KvasItem(
+      ID: json['id'],
+      name: json['name'],
+      description: json['description'],
+      imageUrl: json['image_url']
+    );
+  }
 }

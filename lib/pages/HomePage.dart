@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pks3/models/KvasItem.dart';
 import 'package:pks3/pages/KvasPage.dart';
+import '../api_service.dart';
 import '../components/KvasCard.dart';
 import '../main.dart';
 import '../models/BasketItem.dart';
@@ -8,8 +9,11 @@ import 'AddKvasPage.dart';
 
 
 class Homepage extends StatefulWidget {
-  const Homepage({
-    super.key
+  List<KvasItem> kvases;
+
+  Homepage({
+    super.key,
+    required this.kvases,
   });
 
   @override
@@ -18,17 +22,12 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _navigateToAddNoteScreen(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddKvasPage(onNoteAdded: (KvasItem newItem) {
+      MaterialPageRoute(builder: (context) => AddKvasPage(kvases: widget.kvases, onNoteAdded: (KvasItem newItem) {
         setState(() {
-          dada.add(newItem);
+          widget.kvases.add(newItem);
         });
         Navigator.pop(context);
       })),
@@ -37,7 +36,7 @@ class _HomepageState extends State<Homepage> {
 
 
   void _deleteNoteConfirmation(BuildContext context, int index) {
-    if(dada[index].lovely){
+    if(widget.kvases[index].lovely){
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -55,7 +54,7 @@ class _HomepageState extends State<Homepage> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  dada[index].lovely = false;
+                  widget.kvases[index].lovely = false;
                 });
                 Navigator.of(context).pop();
               },
@@ -67,7 +66,7 @@ class _HomepageState extends State<Homepage> {
     );
     }else{
       setState(() {
-        dada[index].lovely = true;
+        widget.kvases[index].lovely = true;
       });
     }
   }
@@ -81,20 +80,12 @@ class _HomepageState extends State<Homepage> {
           child: Text("Страница всех квасов"),
         ),
       ),
-      body: dada.isEmpty
-          ? const Center(
-        child: Text(
-          "Пупупу, а кваса-то нет",
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-      )
-          : Center(
-        child: GridView.builder(
+      body: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 0.7, // Adjust as needed
           ),
-          itemCount: dada.length,
+          itemCount: widget.kvases.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
@@ -102,26 +93,26 @@ class _HomepageState extends State<Homepage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => kvasPage(item: dada[index])),
-                  );
+                    MaterialPageRoute(builder: (context) => kvasPage(kvasFuture: ApiService().getProduct(widget.kvases[index].ID)),
+                  ));
                 },
                 onLongPress: () {
                   _deleteNoteConfirmation(context, index);
                 },
                 child: Stack(
                   children: [
-                    KvasCard(item: dada[index]),
+                    KvasCard(item: widget.kvases[index]),
                     Positioned(
                       bottom: 8,
                         left: 8,
-                      child: basket.any((basketItem) => basketItem.kvas.name == dada[index].name)
-                          ? Icon(Icons.check)
+                      child: basket.any((basketItem) => basketItem.kvas.ID == widget.kvases[index].ID)
+                          ? const Icon(Icons.check)
                           : IconButton(
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                         onPressed: () {
                           // Добавление элемента в корзину
                           setState(() {
-                            basket.add(BasketItem(dada[index], 1));
+                            basket.add(BasketItem(widget.kvases[index], 1));
                           });
                         },
                       ),
@@ -132,10 +123,15 @@ class _HomepageState extends State<Homepage> {
                       child: IconButton(
                         icon: Icon(
                           Icons.favorite,
-                          color: dada[index].lovely ? Colors.red : Colors.black,
+                          color: widget.kvases[index].lovely ? Colors.red : Colors.black,
                         ),
                         onPressed: () {
-                          _deleteNoteConfirmation(context, index);
+                          setState(() {
+                            widget.kvases[index].lovely = !widget.kvases[index].lovely;
+                            widget.kvases[index].lovely?
+                                favorite.add(widget.kvases[index]):
+                            favorite.removeWhere((kvasek) => kvasek.ID == widget.kvases[index].ID);
+                          });
                         },
                       ),
                     ),
@@ -145,7 +141,6 @@ class _HomepageState extends State<Homepage> {
             );
           },
         ),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToAddNoteScreen(context),
         child: const Icon(Icons.add),

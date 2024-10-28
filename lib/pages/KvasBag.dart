@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:flutter_slidable/flutter_slidable.dart";
+import '../api_service.dart';
 import '../components/KvasCard.dart';
 import '../main.dart';
 import 'KvasPage.dart';
@@ -53,8 +54,8 @@ class _BasketPageState extends State<BasketPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => kvasPage(item: basket[index].kvas)),
-                    );
+                      MaterialPageRoute(builder: (context) => kvasPage(kvasFuture: ApiService().getProduct(basket[index].kvas.ID)),
+                    ));
                   },
                   child: Stack(
                     children: [

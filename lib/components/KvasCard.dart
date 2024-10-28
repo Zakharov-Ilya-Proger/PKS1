@@ -32,7 +32,9 @@ class KvasCard extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 25,
                 color: Colors.black,
+                overflow: TextOverflow.ellipsis
                 ),
+                maxLines: 2,
               ),
               const SizedBox(height: 10,
               ),
