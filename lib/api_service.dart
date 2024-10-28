@@ -67,4 +67,22 @@ class ApiService {
     }
   }
 
+  Future<void> updateKvas(KvasItem item) async {
+    try {
+      final response = await _dio.put('http://10.0.2.2:8000/products/update/${item.ID}', data: {
+        'id': item.ID,
+        'name': item.name,
+        'description': item.description,
+        'image_url': item.imageUrl,
+      });
+      if (response.statusCode == 200) {
+        print('Product updated successfully');
+      } else {
+        throw Exception('Failed to update product');
+      }
+    } catch (e) {
+      print('Error updating product: $e');
+      throw Exception('Error updating product: $e');
+    }
+  }
 }
