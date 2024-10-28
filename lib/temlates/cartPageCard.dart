@@ -6,8 +6,14 @@ import 'package:pks3/models/BasketItem.dart';
 class CartPageCard extends StatefulWidget {
   final CartItem item;
   final Function(CartItem) onRemove;
+  final Function(CartItem, int) onCountChange;
 
-  const CartPageCard({super.key, required this.item, required this.onRemove});
+  const CartPageCard({
+    super.key,
+    required this.item,
+    required this.onRemove,
+    required this.onCountChange,
+  });
 
   @override
   State<CartPageCard> createState() => _CartPageCardState();
@@ -82,11 +88,11 @@ class _CartPageCardState extends State<CartPageCard> {
                                 constraints: const BoxConstraints(), // Empty constraints
                                 onPressed: () {
                                   setState(() {
-                                    if (widget.item.count > 0) {
+                                    if (widget.item.count > 1) {
                                       widget.item.count--;
-                                      if (widget.item.count == 0) {
-                                        widget.onRemove(widget.item);
-                                      }
+                                      widget.onCountChange(widget.item, widget.item.count);
+                                    } else {
+                                      widget.onRemove(widget.item);
                                     }
                                   });
                                 },
@@ -107,6 +113,7 @@ class _CartPageCardState extends State<CartPageCard> {
                                 onPressed: () {
                                   setState(() {
                                     widget.item.count++;
+                                    widget.onCountChange(widget.item, widget.item.count);
                                   });
                                 },
                               ),

@@ -19,6 +19,12 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
+  void updateItemCount(CartItem item, int newCount) {
+    setState(() {
+      item.count = newCount;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +63,11 @@ class _CartPageState extends State<CartPage> {
                         padding: EdgeInsets.only(bottom: index == cart.length - 1 ? 0 : 16),
                         child: Column(
                           children: [
-                            CartPageCard(item: cart[index], onRemove: removeItem),
+                            CartPageCard(
+                              item: cart[index],
+                              onRemove: removeItem,
+                              onCountChange: updateItemCount,
+                            ),
                             if (index == cart.length - 1)
                               Padding(
                                 padding: const EdgeInsets.only(top: 30, bottom: 100),
@@ -74,7 +84,7 @@ class _CartPageState extends State<CartPage> {
                                       ),
                                       const Spacer(),
                                       Text(
-                                        '${cart.map((item) => item.item.cost).reduce((value, element) => value + element)}₽',
+                                        '${cart.map((item) => item.item.cost * item.count).reduce((value, element) => value + element)}₽',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w600,
@@ -89,13 +99,13 @@ class _CartPageState extends State<CartPage> {
                       ),
                     );
                   },
-                )
-                ,
+                ),
               ),
             ],
           ),
-          cart.isEmpty? const SizedBox():
-          Positioned(
+          cart.isEmpty
+              ? const SizedBox()
+              : Positioned(
             bottom: 30,
             left: 0,
             right: 0,
