@@ -13,10 +13,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   void removeItem(CartItem item) {
-    setState(() {
-      cart.removeWhere((cartItem) => cartItem.item.title == item.item.title);
-      data.firstWhere((dataItem) => dataItem.title == item.item.title).isAdd = false;
-    });
+
   }
 
   void updateItemCount(CartItem item, int newCount) {

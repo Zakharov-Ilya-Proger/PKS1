@@ -5,7 +5,7 @@ import '../main.dart';
 import '../models/AnalysisItem.dart';
 
 class HomePageCard extends StatefulWidget {
-  final AnalysisItem item;
+  final Analyze item;
 
   const HomePageCard({super.key, required this.item});
 
@@ -14,14 +14,15 @@ class HomePageCard extends StatefulWidget {
 }
 
 class _HomePageCardState extends State<HomePageCard> {
+  var isAdded = false;
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.81, // 81% от ширины экрана
+      width: MediaQuery.of(context).size.width * 0.81,
       height: 136,
       decoration: BoxDecoration(
         border: Border.all(
-          color: Color(0xFFE0E0E0),
+          color: const Color(0xFFE0E0E0),
           width: 1,
         ),
         borderRadius: BorderRadius.circular(12),
@@ -69,15 +70,15 @@ class _HomePageCardState extends State<HomePageCard> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      if (!widget.item.isAdd) {
-                        widget.item.isAdd = true;
+                      if (!isAdded) {
+                        isAdded = true;
                         cart.add(CartItem(widget.item));
                       }
                     });
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
-                    backgroundColor: widget.item.isAdd
+                    backgroundColor: isAdded
                         ? Colors.white12
                         : const Color(0xFF1A6FEE),
                     minimumSize: const Size(96, 40),
@@ -85,7 +86,7 @@ class _HomePageCardState extends State<HomePageCard> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: widget.item.isAdd
+                  child: isAdded
                       ? const Icon(Icons.done, color: Colors.black,)
                       : const Text(
                     'Добавить',

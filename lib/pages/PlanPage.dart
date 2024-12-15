@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import '../api.dart'; // Импорт ApiService
-import '../models/AnalysisItem.dart'; // Импорт модели AnalysisItem
-import '../temlates/homePageCard.dart'; // Импорт виджета HomePageCard
+import '../temlates/homePageCard.dart';
+import '../api.dart';
+import '../models/AnalysisItem.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class PlanPage extends StatefulWidget {
+  const PlanPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<PlanPage> createState() => _PlanPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late Future<List<Analyze>> _productsFuture;
+class _PlanPageState extends State<PlanPage> {
+  late Future<List<Analyze>> _favoritesFuture;
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = ApiService().getProducts();
+    _favoritesFuture = ApiService().getFavorites();
   }
 
   @override
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
           const Padding(
             padding: EdgeInsets.only(top: 92, left: 27),
             child: Text(
-              "Каталог услуг",
+              "Избранные услуги",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: FutureBuilder<List<Analyze>>(
-              future: _productsFuture,
+              future: _favoritesFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                   return const Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "Каталог пуст",
+                      "Избранные услуги пусты",
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -55,14 +55,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 } else {
-                  List<Analyze> products = snapshot.data!;
+                  List<Analyze> favorites = snapshot.data!;
                   return ListView.builder(
-                    itemCount: products.length,
+                    itemCount: favorites.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Center(
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: index == products.length - 1 ? 32 : 16),
-                          child: HomePageCard(item: products[index]),
+                          padding: EdgeInsets.only(bottom: index == favorites.length - 1 ? 32 : 16),
+                          child: HomePageCard(item: favorites[index]),
                         ),
                       );
                     },
