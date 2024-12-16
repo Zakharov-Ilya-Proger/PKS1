@@ -4,18 +4,10 @@
 
 ## ЭФБО-03-22
 
-## Страница главная с подтягиванием данных и бд
+## Страница входа
 
-![alt biba](ManePage.png)
+![alt biba](HomePage.png)
 
-## Страница запланированных анализов
+## Страница регистрации
 
-![alt bibop](CartPage.png)
-
-## Страниуа корзины
-
-![alt bilibiba](GoidaPage.png)
-
-## Страница истории заказов
-
-![alt bilibiba](HistoryGoidaPage.png)
+![alt bibop](BomBomPage.png)
