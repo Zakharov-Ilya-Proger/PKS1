@@ -3,23 +3,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pks3/pages/CartPage.dart';
 import 'package:pks3/pages/HomePage.dart';
+import 'package:pks3/pages/PlanPage.dart';
 import 'package:pks3/pages/UserPage.dart';
-import 'models/AnalysisItem.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'auth/auth_gate.dart';
 import 'models/BasketItem.dart';
 
-
 List<CartItem> cart = [];
-List<Analyze> data = [
-  Analyze(title: "ПЦР-тест на определение РНК коронавируса стандартный", cost: 1800, days: "2 дня", id: 1),
-  Analyze(title: "Клинический анализ крови с лейкоцитарной формулировкой", cost: 690, days: "1 день", id: 2),
-  Analyze(title: "Биохимический анализ крови, базовый",cost:  2440, days: "1 день", id: 3),
-  Analyze(title: "Анализ на дебила", cost: 1500, days: "1 день", id: 4),
-  Analyze(title: "Исследование плазмы крови", cost: 2500, days: "5 дней", id: 5),
-  Analyze(title: "Исследование на антитиела", cost: 3000, days: "4 дня", id: 6)
-];
 
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: "https://zdhajtovqvlvpqxiiamz.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkaGFqdG92cXZsdnBxeGlpYW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQyNzAzODIsImV4cCI6MjA0OTg0NjM4Mn0.Fll7jUG86ViBraZMbSlPQhqTjv5Tp9hEMdi9-9b8kNo",
+  );
   runApp(const MyApp());
 }
 
@@ -36,11 +33,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: const MyHome(),
+      home: AuthGate(), // Используйте AuthGate для проверки аутентификации
     );
   }
 }
-
 
 class MyHome extends StatefulWidget {
   const MyHome({super.key});
@@ -60,6 +56,7 @@ class _MyHomeState extends State<MyHome> {
 
   final List<Widget> _pages = [
     HomePage(),
+    PlanPage(),
     CartPage(),
     UserPage()
   ];
@@ -71,29 +68,37 @@ class _MyHomeState extends State<MyHome> {
       bottomNavigationBar: SizedBox(
         height: 88,
         child: BottomNavigationBar(
-          items: [
+          items: const [
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("lib/media/HomeIcon.svg"),
+              icon: Icon(Icons.home_filled),
               label: 'Главная',
-              activeIcon: SvgPicture.asset(
-                "lib/media/HomeIcon.svg",
-                color: const Color(0xFF1A6FEE),
+              activeIcon: Icon(
+                Icons.home_filled,
+                color: Color(0xFF1A6FEE),
               ),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("lib/media/CartIcon.svg"),
-              label: 'Карзина',
-              activeIcon: SvgPicture.asset(
-                "lib/media/CartIcon.svg",
-                color: const Color(0xFF1A6FEE),
+              icon: Icon(Icons.assignment),
+              label: 'План',
+              activeIcon: Icon(
+                Icons.assignment,
+                color: Color(0xFF1A6FEE),
               ),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("lib/media/UserIcon.svg"),
+              icon: Icon(Icons.shopping_cart),
+              label: 'Корзина',
+              activeIcon: Icon(
+                Icons.shopping_cart,
+                color: Color(0xFF1A6FEE),
+              ),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
               label: 'Профиль',
-              activeIcon: SvgPicture.asset(
-                "lib/media/UserIcon.svg",
-                color: const Color(0xFF1A6FEE),
+              activeIcon: Icon(
+                Icons.person,
+                color: Color(0xFF1A6FEE),
               ),
             ),
           ],
@@ -101,7 +106,6 @@ class _MyHomeState extends State<MyHome> {
           unselectedItemColor: Colors.grey,
           selectedItemColor: const Color(0xFF1A6FEE), // Customize as needed
           onTap: _onItemTapped,
-
         ),
       ),
     );

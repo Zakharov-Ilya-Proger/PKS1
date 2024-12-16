@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
 
+import 'auth/auth_service.dart';
 import 'models/AnalysisItem.dart';
+import 'models/BasketItem.dart';
 
 class ApiService {
   final Dio _dio = Dio();
 
-  // Измените базовый URL на новый сервер
-  final String baseUrl = 'http://new-server-address';
+  final authService = AuthService();
+
+  final String baseUrl = 'http://10.0.2.2:8000';
 
   Future<List<Analyze>> getProducts() async {
     try {
@@ -19,7 +22,7 @@ class ApiService {
         throw Exception('Failed to load products');
       }
     } catch (e) {
-      print('Error fetching products: $e'); // Логирование ошибки
+      print('Error fetching products: $e');
       throw Exception('Error fetching products: $e');
     }
   }
@@ -33,7 +36,7 @@ class ApiService {
         throw Exception('Failed to load data');
       }
     } catch (e) {
-      print('Failed to load data: $e'); // Логирование ошибки
+      print('Failed to load data: $e');
       throw Exception('Failed to load data: $e');
     }
   }
@@ -93,7 +96,7 @@ class ApiService {
   Future<void> addToFavorites(int analyzeId) async {
     try {
       final response = await _dio.post('$baseUrl/favorite/add/$analyzeId', options: Options(headers: {
-        'Authorization': 'Bearer your_token_here', // Замените на ваш токен
+        'authorization': authService.getCurrentUserid(),
       }));
       if (response.statusCode == 200) {
         print('Added to favorites successfully');
@@ -109,7 +112,7 @@ class ApiService {
   Future<void> removeFromFavorites(int analyzeId) async {
     try {
       final response = await _dio.delete('$baseUrl/favorite/delete/$analyzeId', options: Options(headers: {
-        'Authorization': 'Bearer your_token_here', // Замените на ваш токен
+        'Authorization': authService.getCurrentUserid(),
       }));
       if (response.statusCode == 200) {
         print('Removed from favorites successfully');
@@ -124,17 +127,45 @@ class ApiService {
 
   Future<List<Analyze>> getFavorites() async {
     try {
-      final response = await _dio.get('$baseUrl/favorite/get');
+      final response = await _dio.get('$baseUrl/favorite/get', options: Options(headers: {
+        'authorization': authService.getCurrentUserid(),
+      }));
+
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
         List<Analyze> favorites = data.map((item) => Analyze.fromJson(item)).toList();
         return favorites;
+      } else if (response.statusCode == 404) {
+        throw Exception('404');
       } else {
-        throw Exception('Failed to load favorites');
+        throw Exception('500');
       }
     } catch (e) {
-      print('Error fetching favorites: $e'); // Логирование ошибки
+      print('Error fetching favorites: $e');
       throw Exception('Error fetching favorites: $e');
+    }
+  }
+  Future<void> postToUserCart(List<CartItem> cart) async {
+    try {
+      final List<Map<String, dynamic>> cartData = cart.map((item) =>
+      {
+        'analyze_id': item.item.id,
+        'count': item.count,
+      }).toList();
+
+      final response = await _dio.post('$baseUrl/cart/post', data:
+        cartData, options: Options(headers: {
+        'authorization': authService.getCurrentUserid(),
+      }));
+
+      if (response.statusCode == 200) {
+        print('Cart posted successfully');
+      } else {
+        throw Exception('Failed to post cart');
+      }
+    } catch (e) {
+      print('Error posting cart: $e');
+      throw Exception('Error posting cart: $e');
     }
   }
 }

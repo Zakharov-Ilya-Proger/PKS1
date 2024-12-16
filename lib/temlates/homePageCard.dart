@@ -3,6 +3,7 @@ import 'package:pks3/models/BasketItem.dart';
 
 import '../main.dart';
 import '../models/AnalysisItem.dart';
+import '../api.dart'; // Импортируйте ваш ApiService
 
 class HomePageCard extends StatefulWidget {
   final Analyze item;
@@ -15,6 +16,26 @@ class HomePageCard extends StatefulWidget {
 
 class _HomePageCardState extends State<HomePageCard> {
   var isAdded = false;
+  var isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isAdded = cart.any((cartItem) => cartItem.item.id == widget.item.id);
+    isFavorite = widget.item.favorite;
+  }
+
+  void _toggleFavorite() async {
+    if (isFavorite) {
+      await ApiService().removeFromFavorites(widget.item.id);
+    } else {
+      await ApiService().addToFavorites(widget.item.id);
+    }
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,6 +86,16 @@ class _HomePageCardState extends State<HomePageCard> {
                       ),
                     ),
                   ],
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : Colors.grey,
+                    ),
+                    onPressed: _toggleFavorite,
+                  ),
                 ),
                 const Spacer(),
                 ElevatedButton(

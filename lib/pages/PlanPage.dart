@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../temlates/homePageCard.dart';
+import '../temlates/favoritePageCard.dart';
 import '../api.dart';
 import '../models/AnalysisItem.dart';
 
@@ -12,11 +12,24 @@ class PlanPage extends StatefulWidget {
 
 class _PlanPageState extends State<PlanPage> {
   late Future<List<Analyze>> _favoritesFuture;
+  String _selectedFilter = 'все';
 
   @override
   void initState() {
     super.initState();
-    _favoritesFuture = ApiService().getFavorites();
+    _loadFavorites();
+  }
+
+  void _loadFavorites() {
+    setState(() {
+      _favoritesFuture = ApiService().getFavorites();
+    });
+  }
+
+  void _filterFavorites(String filter) {
+    setState(() {
+      _selectedFilter = filter;
+    });
   }
 
   @override
@@ -25,15 +38,38 @@ class _PlanPageState extends State<PlanPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 92, left: 27),
-            child: Text(
-              "Избранные услуги",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 92, left: 27),
+                child: Text(
+                  "Избранные услуги",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-            ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(top: 92, left: 27, right: 35),
+                child: DropdownButton<String>(
+                  value: _selectedFilter,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      _filterFavorites(newValue);
+                    }
+                  },
+                  items: <String>['все', 'кровь', 'кал', 'моча']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
           ),
           Expanded(
             child: FutureBuilder<List<Analyze>>(
@@ -42,7 +78,11 @@ class _PlanPageState extends State<PlanPage> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return const Center(child: Text("Ошибка загрузки данных"));
+                  if (snapshot.error.toString().contains('404')) {
+                    return const Center(child: Text("Избранные услуги пусты"));
+                  } else {
+                    return const Center(child: Text("Ошибка загрузки данных"));
+                  }
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Align(
                     alignment: Alignment.center,
@@ -56,13 +96,19 @@ class _PlanPageState extends State<PlanPage> {
                   );
                 } else {
                   List<Analyze> favorites = snapshot.data!;
+                  List<Analyze> filteredFavorites = favorites.where((favorite) {
+                    return _selectedFilter == 'все' || favorite.type == _selectedFilter;
+                  }).toList();
                   return ListView.builder(
-                    itemCount: favorites.length,
+                    itemCount: filteredFavorites.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Center(
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: index == favorites.length - 1 ? 32 : 16),
-                          child: HomePageCard(item: favorites[index]),
+                          padding: EdgeInsets.only(bottom: index == filteredFavorites.length - 1 ? 32 : 16),
+                          child: FavoritePageCard(
+                            item: filteredFavorites[index],
+                            onFavoriteChanged: _loadFavorites,
+                          ),
                         ),
                       );
                     },

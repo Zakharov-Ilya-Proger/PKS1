@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pks3/main.dart';
 import 'package:pks3/temlates/cartPageCard.dart';
+import 'package:pks3/api.dart'; // Импортируйте ваш ApiService
 
 import '../models/BasketItem.dart';
 
@@ -13,13 +14,55 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   void removeItem(CartItem item) {
-
+    setState(() {
+      cart.remove(item);
+    });
   }
 
   void updateItemCount(CartItem item, int newCount) {
     setState(() {
       item.count = newCount;
     });
+  }
+
+  void clearCart() {
+    setState(() {
+      cart.clear();
+    });
+  }
+
+  void _postToUserCart() async {
+    try {
+      await ApiService().postToUserCart(cart);
+      // После успешного отправления корзины, показываем уведомление
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Ваш заказ успешно оформлен!'),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Закрыть',
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+      // Очищаем корзину после успешного отправления
+      clearCart();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Ошибка отправки корзины: $e'),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Закрыть',
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -45,7 +88,7 @@ class _CartPageState extends State<CartPage> {
                     ? const Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Корзина пуст",
+                    "Корзина пуста",
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -108,7 +151,7 @@ class _CartPageState extends State<CartPage> {
             right: 0,
             child: Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: _postToUserCart,
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: const Color(0xFF1A6FEE),

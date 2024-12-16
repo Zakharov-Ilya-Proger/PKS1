@@ -3,8 +3,17 @@ class Analyze {
   final String title;
   final int cost;
   final String days;
+  final String type;
+  final bool favorite;
 
-  Analyze({required this.id, required this.title, required this.cost, required this.days});
+  Analyze({
+    required this.id,
+    required this.title,
+    required this.cost,
+    required this.days,
+    required this.type,
+    required this.favorite
+  });
 
   factory Analyze.fromJson(Map<String, dynamic> json) {
     return Analyze(
@@ -12,6 +21,8 @@ class Analyze {
       title: json['title'],
       cost: json['cost'],
       days: json['days'],
+      type: json['type'],
+      favorite: json['is_favorite']
     );
   }
 
@@ -21,6 +32,8 @@ class Analyze {
       'title': title,
       'cost': cost,
       'days': days,
+      'type': type,
+      'is_favorite': favorite
     };
   }
 }

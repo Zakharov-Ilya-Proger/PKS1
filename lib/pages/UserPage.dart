@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../auth/auth_service.dart';
+import 'LoginPage.dart'; // Импортируйте ваш AuthService
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -8,6 +10,22 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  final authService = AuthService();
+
+  void _signOut() async {
+    try {
+      await authService.singOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +33,7 @@ class _UserPageState extends State<UserPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-              padding: const EdgeInsets.only(top: 92),
+            padding: const EdgeInsets.only(top: 92),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -27,7 +45,7 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
                 const Padding(
-                    padding: EdgeInsets.only(top:22),
+                  padding: EdgeInsets.only(top: 22),
                   child: Text(
                     "+7-905-134-72-80",
                     style: TextStyle(
@@ -37,19 +55,31 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top:16),
-                  child: Text(
-                    "GOYDA@svo.zov",
-                    style: TextStyle(
-                      color: Color(0xFF898A8D),
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                FutureBuilder<String?>(
+                  future: Future.value(authService.getCurrentUserEmail()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return const Text("Ошибка загрузки email");
+                    } else {
+                      final email = snapshot.data;
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Text(
+                          email ?? "Email не найден",
+                          style: const TextStyle(
+                            color: Color(0xFF898A8D),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top:48),
+                  padding: const EdgeInsets.only(top: 48),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -148,27 +178,27 @@ class _UserPageState extends State<UserPage> {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 48),
+          Padding(
+            padding: const EdgeInsets.only(top: 48),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Ответы на вопросы",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(top: 24),
                     child: Text(
                       "Политика конфиденциальности",
@@ -178,7 +208,7 @@ class _UserPageState extends State<UserPage> {
                       ),
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(top: 24),
                     child: Text(
                       "Пользовательское соглашение",
@@ -189,13 +219,16 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 24),
-                    child: Text(
-                      "Выход",
-                      style: TextStyle(
-                        color: Color(0xffFD3535),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                    padding: const EdgeInsets.only(top: 24),
+                    child: GestureDetector(
+                      onTap: _signOut,
+                      child: const Text(
+                        "Выход",
+                        style: TextStyle(
+                          color: Color(0xffFD3535),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
