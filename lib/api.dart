@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-
 import 'auth/auth_service.dart';
 import 'models/AnalysisItem.dart';
 import 'models/BasketItem.dart';
+import 'models/CatrHistoryItem.dart';
 
 class ApiService {
   final Dio _dio = Dio();
@@ -43,12 +43,14 @@ class ApiService {
 
   Future<void> addProductToServer(Analyze newProduct) async {
     try {
-      final response = await _dio.post('$baseUrl/cart/post', data: {
-        'id': newProduct.id,
+      final response = await _dio.post('$baseUrl/analyzes/add', data: {
         'title': newProduct.title,
         'cost': newProduct.cost,
         'days': newProduct.days,
-      });
+        'type': newProduct.type,
+      }, options: Options(headers: {
+        'authorization': authService.getCurrentUserid(),
+      }));
       if (response.statusCode == 200) {
         print('Product added successfully');
       } else {
@@ -60,9 +62,12 @@ class ApiService {
     }
   }
 
+
   Future<void> deleteProduct(int id) async {
     try {
-      final response = await _dio.delete('$baseUrl/analyzes/delete/$id');
+      final response = await _dio.delete('$baseUrl/analyzes/delete/$id', options: Options(headers: {
+        'authorization': authService.getCurrentUserid(),
+      }));
       if (response.statusCode == 200) {
         print('Product deleted successfully');
       } else {
@@ -76,12 +81,15 @@ class ApiService {
 
   Future<void> updateProduct(Analyze item) async {
     try {
-      final response = await _dio.put('$baseUrl/analyzes/update/${item.id}', data: {
+      final response = await _dio.put('$baseUrl/analyzes/update', data: {
         'id': item.id,
         'title': item.title,
         'cost': item.cost,
         'days': item.days,
-      });
+        'type': item.type
+      }, options: Options(headers: {
+        'authorization': authService.getCurrentUserid(),
+      }));
       if (response.statusCode == 200) {
         print('Product updated successfully');
       } else {
@@ -166,6 +174,22 @@ class ApiService {
     } catch (e) {
       print('Error posting cart: $e');
       throw Exception('Error posting cart: $e');
+    }
+  }
+  Future<List<CartHistoryItem>> getCartHistory() async {
+    try {
+      final response = await _dio.get('$baseUrl/cart/history', options: Options(headers: {
+        'authorization': authService.getCurrentUserid(),
+      }));
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        return data.map((item) => CartHistoryItem.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to load cart history');
+      }
+    } catch (e) {
+      print('Error fetching cart history: $e');
+      throw Exception('Error fetching cart history: $e');
     }
   }
 }

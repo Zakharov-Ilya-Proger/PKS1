@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../auth/auth_service.dart';
-import 'LoginPage.dart'; // Импортируйте ваш AuthService
+import '../models/CatrHistoryItem.dart';
+import 'CartHistoryPage.dart';
+import 'LoginPage.dart';
+import '../api.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -12,6 +15,12 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   final authService = AuthService();
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
   void _signOut() async {
     try {
       await authService.singOut();
@@ -21,7 +30,7 @@ class _UserPageState extends State<UserPage> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: \$e")));
       }
     }
   }
@@ -38,7 +47,7 @@ class _UserPageState extends State<UserPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Гойда",
+                  "Главная",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
@@ -90,14 +99,48 @@ class _UserPageState extends State<UserPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image.asset(
-                              "lib/media/Order.jpg",
+                              "media/Order.jpg",
                               width: 32,
                               height: 32,
                             ),
                             const Padding(
                               padding: EdgeInsets.only(left: 20),
                               child: Text(
-                                "Мои Гойды",
+                                "Мои заказы",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              icon: const Icon(Icons.arrow_forward_ios),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => OrderHistoryPage()),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 335,
+                        height: 64,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "media/Сards.jpg",
+                              width: 32,
+                              height: 32,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
+                                "Медицинская карта",
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w500,
@@ -114,31 +157,7 @@ class _UserPageState extends State<UserPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image.asset(
-                              "lib/media/Сards.jpg",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text(
-                                "Медицинская гойда",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 335,
-                        height: 64,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "lib/media/Adress.jpg",
+                              "media/Adress.jpg",
                               width: 32,
                               height: 32,
                             ),
@@ -162,7 +181,7 @@ class _UserPageState extends State<UserPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image.asset(
-                              "lib/media/Settings.jpg",
+                              "media/Settings.jpg",
                               width: 32,
                               height: 32,
                             ),
@@ -225,7 +244,7 @@ class _UserPageState extends State<UserPage> {
                       child: const Text(
                         "Выход",
                         style: TextStyle(
-                          color: Color(0xffFD3535),
+                          color: Color(0xFFFD3535),
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),

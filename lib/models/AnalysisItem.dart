@@ -12,7 +12,7 @@ class Analyze {
     required this.cost,
     required this.days,
     required this.type,
-    required this.favorite
+    required this.favorite,
   });
 
   factory Analyze.fromJson(Map<String, dynamic> json) {
@@ -22,7 +22,7 @@ class Analyze {
       cost: json['cost'],
       days: json['days'],
       type: json['type'],
-      favorite: json['is_favorite']
+      favorite: json['is_favorite'],
     );
   }
 
@@ -33,7 +33,7 @@ class Analyze {
       'cost': cost,
       'days': days,
       'type': type,
-      'is_favorite': favorite
+      'is_favorite': favorite,
     };
   }
 }

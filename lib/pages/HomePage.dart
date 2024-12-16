@@ -17,7 +17,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _productsFuture = ApiService().getProducts();
+    _loadProducts();
+  }
+
+  void _loadProducts() {
+    setState(() {
+      _productsFuture = ApiService().getProducts();
+    });
   }
 
   void _filterProducts(String filter) {
@@ -26,17 +32,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _showAddItemDialog(BuildContext context) {
-    final _titleController = TextEditingController();
-    final _daysController = TextEditingController();
-    final _costController = TextEditingController();
-    String _selectedType = 'кровь';
+  void _showAddItemDialog(BuildContext context, Analyze? item) {
+    final _titleController = TextEditingController(text: item?.title ?? '');
+    final _daysController = TextEditingController(text: item?.days ?? '');
+    final _costController = TextEditingController(text: item?.cost.toString() ?? '');
+    String _selectedType = item?.type ?? 'кровь';
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Добавить новый анализ'),
+          title: const Text('Обновить или удалить анализ'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -92,31 +98,42 @@ class _HomePageState extends State<HomePage> {
                 final cost = int.tryParse(_costController.text) ?? 0;
 
                 if (title.isNotEmpty && days.isNotEmpty && cost > 0) {
-                  final newItem = Analyze(
-                    id: DateTime.now().millisecondsSinceEpoch,
+                  final updatedItem = Analyze(
+                    id: item?.id ?? DateTime.now().millisecondsSinceEpoch,
                     title: title,
                     cost: cost,
                     days: days,
                     type: _selectedType,
-                    favorite: false,
+                    favorite: item?.favorite ?? false,
                   );
 
                   try {
-                    await ApiService().addProductToServer(newItem);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Элемент успешно добавлен!'),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
+                    if (item != null) {
+                      await ApiService().updateProduct(updatedItem);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Элемент успешно обновлен!'),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    } else {
+                      await ApiService().addProductToServer(updatedItem);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Элемент успешно добавлен!'),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    }
                     _titleController.clear();
                     _daysController.clear();
                     _costController.clear();
                     Navigator.of(context).pop();
+                    _loadProducts(); // Перезапрашиваем данные с сервера
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Ошибка добавления элемента: $e'),
+                        content: Text('Ошибка обновления элемента: $e'),
                         duration: const Duration(seconds: 3),
                       ),
                     );
@@ -130,7 +147,32 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               },
-              child: const Text('Добавить'),
+              child: const Text('Обновить или добавить'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (item != null) {
+                  try {
+                    await ApiService().deleteProduct(item.id);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Элемент успешно удален!'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                    _loadProducts(); // Перезапрашиваем данные с сервера
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Ошибка удаления элемента: $e'),
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }
+              },
+              child: const Text('Удалить'),
             ),
           ],
         );
@@ -211,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                             child: IconButton(
                               icon: const Icon(Icons.add),
                               onPressed: () {
-                                _showAddItemDialog(context);
+                                _showAddItemDialog(context, null);
                               },
                             ),
                           ),
@@ -220,7 +262,12 @@ class _HomePageState extends State<HomePage> {
                         return Center(
                           child: Padding(
                             padding: EdgeInsets.only(bottom: index == filteredProducts.length - 1 ? 15 : 16),
-                            child: HomePageCard(item: filteredProducts[index]),
+                            child: GestureDetector(
+                              onTap: () {
+                                _showAddItemDialog(context, filteredProducts[index]);
+                              },
+                              child: HomePageCard(item: filteredProducts[index]),
+                            ),
                           ),
                         );
                       }
