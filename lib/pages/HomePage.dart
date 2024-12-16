@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
 
                 if (title.isNotEmpty && days.isNotEmpty && cost > 0) {
                   final newItem = Analyze(
-                    id: DateTime.now().millisecondsSinceEpoch, // Генерируем уникальный ID
+                    id: DateTime.now().millisecondsSinceEpoch,
                     title: title,
                     cost: cost,
                     days: days,
@@ -104,12 +104,11 @@ class _HomePageState extends State<HomePage> {
                   try {
                     await ApiService().addProductToServer(newItem);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Элемент успешно добавлен!'),
-                        duration: const Duration(seconds: 3),
+                      const SnackBar(
+                        content: Text('Элемент успешно добавлен!'),
+                        duration: Duration(seconds: 3),
                       ),
                     );
-                    // Очищаем поля после успешного добавления
                     _titleController.clear();
                     _daysController.clear();
                     _costController.clear();
@@ -124,9 +123,9 @@ class _HomePageState extends State<HomePage> {
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('Пожалуйста, заполните все поля'),
-                      duration: const Duration(seconds: 3),
+                    const SnackBar(
+                      content: Text('Пожалуйста, заполните все поля'),
+                      duration: Duration(seconds: 3),
                     ),
                   );
                 }
@@ -203,12 +202,12 @@ class _HomePageState extends State<HomePage> {
                     return _selectedFilter == 'все' || product.type == _selectedFilter;
                   }).toList();
                   return ListView.builder(
-                    itemCount: filteredProducts.length + 1, // Добавляем один элемент для иконки
+                    itemCount: filteredProducts.length + 1,
                     itemBuilder: (BuildContext context, int index) {
                       if (index == filteredProducts.length) {
                         return Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(bottom: 32),
+                            padding: const EdgeInsets.only(bottom: 15),
                             child: IconButton(
                               icon: const Icon(Icons.add),
                               onPressed: () {
@@ -220,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                       } else {
                         return Center(
                           child: Padding(
-                            padding: EdgeInsets.only(bottom: index == filteredProducts.length - 1 ? 25 : 16),
+                            padding: EdgeInsets.only(bottom: index == filteredProducts.length - 1 ? 15 : 16),
                             child: HomePageCard(item: filteredProducts[index]),
                           ),
                         );
