@@ -4,10 +4,14 @@
 
 ## ЭФБО-03-22
 
-## Страница входа
+## Сортировка
 
 ![alt biba](HomePage.png)
 
-## Страница регистрации
+## Добавление
 
 ![alt bibop](BomBomPage.png)
+
+## Редактирование и удаление
+
+![alt bibop](BamBamPage.png)
