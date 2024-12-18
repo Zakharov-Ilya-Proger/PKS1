@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../temlates/favoritePageCard.dart';
+import '../templates/favoritePageCard.dart';
 import '../api.dart';
 import '../models/AnalysisItem.dart';
 
@@ -79,7 +79,10 @@ class _PlanPageState extends State<PlanPage> {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   if (snapshot.error.toString().contains('404')) {
-                    return const Center(child: Text("Избранные услуги пусты"));
+                    return const Center(child: Text("Запланированных услуг нет",style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),));
                   } else {
                     return const Center(child: Text("Ошибка загрузки данных"));
                   }
@@ -87,7 +90,7 @@ class _PlanPageState extends State<PlanPage> {
                   return const Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "Избранные услуги пусты",
+                      "Запланированных услуг нет",
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,

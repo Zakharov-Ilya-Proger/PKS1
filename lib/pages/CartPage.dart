@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pks3/main.dart';
-import 'package:pks3/temlates/cartPageCard.dart';
+import 'package:pks3/templates/cartPageCard.dart';
 import 'package:pks3/api.dart'; // Импортируйте ваш ApiService
 
 import '../models/BasketItem.dart';

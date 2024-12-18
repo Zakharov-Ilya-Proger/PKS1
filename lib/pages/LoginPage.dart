@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../auth/auth_service.dart';
-import 'RegisterPage.dart'; // Импортируйте страницу регистрации
+import 'RegisterPage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,15 +17,13 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   void login() async {
-    final email = _emailController.text;
-    final password = _passwordController.text;
-
-    try {
-      await authService.singInWithEmailPassword(email, password);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
-      }
+    final authService = Provider.of<AuthService>(context, listen: false);
+    try{
+      await authService.singInWithEmailPassword(
+          _emailController.text,
+          _passwordController.text);
+    } catch (e){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
     }
   }
 
@@ -46,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
@@ -54,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 10),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
               ),

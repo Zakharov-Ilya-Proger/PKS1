@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../auth/auth_service.dart';
+import 'package:pks3/auth/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -18,13 +19,20 @@ class _RegisterPageState extends State<RegisterPage> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    try {
-      await authService.singUpWithEmailPassword(email, password);
-      Navigator.pop(context);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
-      }
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    try{
+      await authService.singUpWithEmailPassword(
+          email,
+          password,
+      );
+    }catch (e){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(e.toString(),
+              ),
+          ),
+      );
     }
   }
 

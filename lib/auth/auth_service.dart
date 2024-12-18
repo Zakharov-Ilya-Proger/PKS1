@@ -1,37 +1,58 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-class AuthService {
-  final SupabaseClient _supabase = Supabase.instance.client;
+class AuthService with ChangeNotifier {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
-  Future<AuthResponse> singInWithEmailPassword(
+  Future<UserCredential> singInWithEmailPassword(
       String email, String password) async {
-    return await _supabase.auth.signInWithPassword(
-        password: password,
-        email: email
-    );
+    try {
+      UserCredential userCredential =
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      await _fireStore.collection('users').doc(userCredential.user!.uid).set({
+        'uid': userCredential.user!.uid,
+        'email': email
+      }, SetOptions(merge: true));
+
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    }
   }
 
-  Future<AuthResponse> singUpWithEmailPassword(
+  Future<UserCredential> singUpWithEmailPassword(
       String email, String password) async {
-    return await _supabase.auth.signUp(
-        password: password,
-        email: email,
-    );
+    try {
+      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      await _fireStore.collection('users').doc(userCredential.user!.uid).set({
+        'uid': userCredential.user!.uid,
+        'email': email
+      });
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    }
   }
 
   Future<void> singOut() async {
-    await _supabase.auth.signOut();
+    return await FirebaseAuth.instance.signOut();
   }
 
-  String? getCurrentUserEmail(){
-    final session = _supabase.auth.currentSession;
-    final user = session?.user;
+  String? getCurrentUserEmail() {
+    final user = _firebaseAuth.currentUser;
     return user?.email;
   }
 
-  String? getCurrentUserid(){
-    final session = _supabase.auth.currentSession;
-    final user = session?.user;
-    return user?.id;
+  String? getCurrentUserid() {
+    final user = _firebaseAuth.currentUser;
+    return user?.uid;
   }
 }

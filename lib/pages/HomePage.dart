@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../api.dart'; // Импорт ApiService
 import '../models/AnalysisItem.dart'; // Импорт модели AnalysisItem
-import '../temlates/homePageCard.dart'; // Импорт виджета HomePageCard
+import '../templates/homePageCard.dart'; // Импорт виджета HomePageCard
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -1,22 +1,26 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pks3/auth/auth_service.dart';
 import 'package:pks3/pages/CartPage.dart';
 import 'package:pks3/pages/HomePage.dart';
 import 'package:pks3/pages/PlanPage.dart';
 import 'package:pks3/pages/UserPage.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 import 'auth/auth_gate.dart';
 import 'models/BasketItem.dart';
+import 'firebase_options.dart';
 
 List<CartItem> cart = [];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(
-    url: "https://zdhajtovqvlvpqxiiamz.supabase.co",
-    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkaGFqdG92cXZsdnBxeGlpYW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQyNzAzODIsImV4cCI6MjA0OTg0NjM4Mn0.Fll7jUG86ViBraZMbSlPQhqTjv5Tp9hEMdi9-9b8kNo",
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
   );
-  runApp(const MyApp());
+  runApp(
+    const MyApp()
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,7 +28,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthService())],
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -32,7 +38,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.montserratTextTheme(),
       ),
-      home: AuthGate(), // Используйте AuthGate для проверки аутентификации
+      home: AuthGate(),
+    )
     );
   }
 }

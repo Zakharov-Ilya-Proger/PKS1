@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../auth/auth_service.dart';
 import '../models/CatrHistoryItem.dart';
 import 'CartHistoryPage.dart';
+import 'ChatPage.dart';
 import 'LoginPage.dart';
 import '../api.dart';
 
@@ -22,17 +24,8 @@ class _UserPageState extends State<UserPage> {
 
 
   void _signOut() async {
-    try {
-      await authService.singOut();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: \$e")));
-      }
-    }
+    final authService = Provider.of<AuthService>(context, listen: false);
+    authService.singOut();
   }
 
   @override
@@ -210,13 +203,18 @@ class _UserPageState extends State<UserPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
+                  GestureDetector(
+                    onTap: (){ Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ChatPage()),
+                    );},
+                    child: const Text(
                     "Ответы на вопросы",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                     ),
-                  ),
+                  ),),
                   const Padding(
                     padding: EdgeInsets.only(top: 24),
                     child: Text(
