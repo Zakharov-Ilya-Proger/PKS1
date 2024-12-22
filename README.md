@@ -39,13 +39,13 @@
 
 ## Изображение приложения
 ------------
-        <img src="imgs/photo_2024-12-19_00-18-27.jpg" alt="Image 1" style="width: 50%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-18-50.jpg" alt="Image 2" style="width: 50%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-18-59.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-19-05.jpg" alt="Image 1" style="width: 50%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-19-12.jpg" alt="Image 2" style="width: 50%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-19-21.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_03-36-15.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
+ <img src="imgs/photo_2024-12-19_00-18-27.jpg" alt="Image 1" style="width: 50%; max-width: 300px;">
+<img src="imgs/photo_2024-12-19_00-18-50.jpg" alt="Image 2" style="width: 50%; max-width: 300px;">
+<img src="imgs/photo_2024-12-19_00-18-59.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
+<img src="imgs/photo_2024-12-19_00-19-05.jpg" alt="Image 1" style="width: 50%; max-width: 300px;">
+<img src="imgs/photo_2024-12-19_00-19-12.jpg" alt="Image 2" style="width: 50%; max-width: 300px;">
+<img src="imgs/photo_2024-12-19_00-19-21.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
+<img src="imgs/photo_2024-12-19_03-36-15.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
 
 ------------
 
