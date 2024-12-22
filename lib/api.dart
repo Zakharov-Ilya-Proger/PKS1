@@ -9,11 +9,14 @@ class ApiService {
 
   final authService = AuthService();
 
-  final String baseUrl = 'http://10.0.2.2:8000';
+  final String baseUrl = 'https://gigached.onrender.com';
 
   Future<List<Analyze>> getProducts() async {
     try {
-      final response = await _dio.get('$baseUrl/analyzes/');
+      final response = await _dio.get('$baseUrl/analyzes/',
+          options: Options(headers: {
+          'authorization': authService.getCurrentUserid(),
+      }));
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
         List<Analyze> products = data.map((product) => Analyze.fromJson(product)).toList();

@@ -22,7 +22,6 @@ class _UserPageState extends State<UserPage> {
     super.initState();
   }
 
-
   void _signOut() async {
     final authService = Provider.of<AuthService>(context, listen: false);
     authService.singOut();
@@ -31,229 +30,143 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 92),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Главная",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 22),
-                  child: Text(
-                    "+7-905-134-72-80",
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 92),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Профиль",
                     style: TextStyle(
-                      color: Color(0xFF898A8D),
-                      fontSize: 15,
+                      fontSize: 24,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                ),
-                FutureBuilder<String?>(
-                  future: Future.value(authService.getCurrentUserEmail()),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return const Text("Ошибка загрузки email");
-                    } else {
-                      final email = snapshot.data;
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Text(
-                          email ?? "Email не найден",
-                          style: const TextStyle(
-                            color: Color(0xFF898A8D),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
+                  FutureBuilder<String?>(
+                    future: Future.value(authService.getCurrentUserEmail()),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return const Text("Ошибка загрузки email");
+                      } else {
+                        final email = snapshot.data;
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Text(
+                            email ?? "Email не найден",
+                            style: const TextStyle(
+                              color: Color(0xFF898A8D),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 75,),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 48),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 335,
+                          height: 64,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.shopping_cart, color: Color(0xFF1A6FEE),),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 20),
+                                child: Text(
+                                  "Мои заказы",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                icon: const Icon(Icons.arrow_forward_ios, color: Color(0xFF1A6FEE),),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => OrderHistoryPage()),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    }
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 48),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 335,
-                        height: 64,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "media/Order.jpg",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text(
-                                "Мои заказы",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
+                        SizedBox(
+                          width: 335,
+                          height: 64,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.chat, color: Color(0xFF1A6FEE),),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 20),
+                                child: Text(
+                                  "Чат техподдержки",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              icon: const Icon(Icons.arrow_forward_ios),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => OrderHistoryPage()),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 335,
-                        height: 64,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "media/Сards.jpg",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text(
-                                "Медицинская карта",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              const Spacer(),
+                              IconButton(
+                                icon: const Icon(Icons.arrow_forward_ios, color: Color(0xFF1A6FEE),),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const ChatPage()),
+                                  );
+                                },
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 335,
-                        height: 64,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "media/Adress.jpg",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text(
-                                "Мои адреса",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 335,
-                        height: 64,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "media/Settings.jpg",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text(
-                                "Настройки",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 48),
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: (){ Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ChatPage()),
-                    );},
-                    child: const Text(
-                    "Ответы на вопросы",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 24),
-                    child: Text(
-                      "Политика конфиденциальности",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 24),
-                    child: Text(
-                      "Пользовательское соглашение",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24),
-                    child: GestureDetector(
-                      onTap: _signOut,
-                      child: const Text(
-                        "Выход",
-                        style: TextStyle(
-                          color: Color(0xFFFD3535),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: 48),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24, bottom: 50),
+                      child: GestureDetector(
+                        onTap: _signOut,
+                        child: const Text(
+                          "Выход",
+                          style: TextStyle(
+                            color: Color(0xFFFD3535),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
