@@ -39,44 +39,13 @@
 
 ## Изображение приложения
 ------------
-<div style="display: flex; overflow: hidden; width: 100%;">
-    <div style="display: flex; transition: transform 0.5s ease-in-out;">
-        <img src="imgs/photo_2024-12-19_00-18-27.jpg" alt="Image 1" style="width: 100%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-18-50.jpg" alt="Image 2" style="width: 100%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-18-59.jpg" alt="Image 3" style="width: 100%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-19-05.jpg" alt="Image 1" style="width: 100%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-19-12.jpg" alt="Image 2" style="width: 100%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_00-19-21.jpg" alt="Image 3" style="width: 100%; max-width: 300px;">
-        <img src="imgs/photo_2024-12-19_03-36-15.jpg" alt="Image 3" style="width: 100%; max-width: 300px;">
-    </div>
-</div>
-<style>
-    .carousel-container {
-        display: flex;
-        overflow: hidden;
-        width: 100%;
-    }
-    .carousel {
-        display: flex;
-        transition: transform 0.5s ease-in-out;
-    }
-    .carousel img {
-        width: 100%;
-        max-width: 300px;
-    }
-</style>
-<script>
-    let currentIndex = 0;
-    const carousel = document.querySelector('.carousel');
-    const images = document.querySelectorAll('.carousel img');
-
-    function showNextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
-
-    setInterval(showNextImage, 3000); // Change image every 3 seconds
-</script>
+        <img src="imgs/photo_2024-12-19_00-18-27.jpg" alt="Image 1" style="width: 50%; max-width: 300px;">
+        <img src="imgs/photo_2024-12-19_00-18-50.jpg" alt="Image 2" style="width: 50%; max-width: 300px;">
+        <img src="imgs/photo_2024-12-19_00-18-59.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
+        <img src="imgs/photo_2024-12-19_00-19-05.jpg" alt="Image 1" style="width: 50%; max-width: 300px;">
+        <img src="imgs/photo_2024-12-19_00-19-12.jpg" alt="Image 2" style="width: 50%; max-width: 300px;">
+        <img src="imgs/photo_2024-12-19_00-19-21.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
+        <img src="imgs/photo_2024-12-19_03-36-15.jpg" alt="Image 3" style="width: 50%; max-width: 300px;">
 
 ------------
 
